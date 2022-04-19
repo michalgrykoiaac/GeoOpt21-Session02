@@ -1,13 +1,9 @@
 from flask import Flask
 import ghhops_server as hs
 
-#notice, we import another file as a library
+
 import geometry as geo
 
-#we also import random library to generate some randomness 
-import random as r
-
-#finally we bring rhino3dm to create rhino geometry in python
 import rhino3dm as rg
 
 app = Flask(__name__)
