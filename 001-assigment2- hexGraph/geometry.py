@@ -1,12 +1,10 @@
-from turtle import ycor
 import rhino3dm as rg
 import networkx as nx
 import random
 
-
 def createGridGraph(x, y):
 
-    M = nx.grid_2d_graph(x,y)
+    M = nx.hexagonal_lattice_graph(x,y)
     return M
 
 def addRandomWeights(G):
@@ -57,11 +55,16 @@ def getEdges(G, layout = 0):
 
 
 
+
+
+
+
 G = createGridGraph(3,3)
 GW = addRandomWeights(G)
 
 nodes = getNodes(G)
 edges = getEdges(G)
+
 
 
 

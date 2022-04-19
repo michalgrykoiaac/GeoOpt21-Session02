@@ -1,3 +1,4 @@
+from pickle import FALSE
 from flask import Flask
 import ghhops_server as hs
 import rhino3dm as rg
@@ -10,30 +11,47 @@ hops = hs.Hops(app)
 
 
 @hops.component(
-    "/createGraph",
+    "/createHexGraph",
     name = "Create Graph",
     inputs=[
         hs.HopsInteger("Count X", "X", "Number of node in X", hs.HopsParamAccess.ITEM, default= 1),
         hs.HopsInteger("Count Y", "Y", "Number of node in Y", hs.HopsParamAccess.ITEM, default= 1),
         hs.HopsInteger("Layout", "L", "Layout to order Nodes", hs.HopsParamAccess.ITEM, default= 0),
+       # hs.HopsInteger("height", "h", "height of extrusion", hs.HopsParamAccess.ITEM),
 
 
     ],
     outputs=[
        hs.HopsPoint("Nodes","N","List of Nodes ", hs.HopsParamAccess.LIST),
-       hs.HopsCurve("Edges","E","List of Edges ", hs.HopsParamAccess.LIST)
+       hs.HopsCurve("Edges","E","List of Edges ", hs.HopsParamAccess.LIST),
+      hs.HopsSurface("Surface","S","List of Surfaces ", hs.HopsParamAccess.LIST)
 
     ]
 )
-def createGraph(X, Y, layout):
+def createGraph(X, Y, layout,):
 
     G = geo.createGridGraph(X, Y)
     GW = geo.addRandomWeights(G)
 
+
+  
+
+
+
     nodes = geo.getNodes(GW, layout)
     edges = geo.getEdges(GW, layout) 
 
-    return nodes, edges
+    #curve = rg.Curve.ToNurbsCurve(edges)
+   # surface= rg.Extrusion.Create(curve,100,True)
+    surface= rg.Extrusion.Create(edges,100,FALSE)
+
+    return nodes, edges, surface
+
+
+
+
+
+
 
 
 
