@@ -1,33 +1,19 @@
 import rhino3dm as rg
 import networkx as nx
 
-#pseudo code
-#identify unique points and add them as nodes to network
-#extract start and end points of lines
-#determine which node the start or end point matches to
-#add network edge
 
-def createGridGraph(points, lines):
-    G = nx.Graph()
-    ptCoords = []
+def createGridGraph(x, y):
 
-    for i in range(len(points)):
-        G.add_node(i)
-        ptCoords.append((round(points[i].X, 3), round(points[i].Y, 3), round(points[i].Z, 3)))
-        print(ptCoords)
-    
-    for i in range(len(lines)):
-        print(lines[i].PointAtStart)
-        print((round(lines[i].PointAtStart.X, 3), round(lines[i].PointAtStart.Y,3), round(lines[i].PointAtStart.Z,3)))
-        startNode = ptCoords.index((round(lines[i].PointAtStart.X,3), round(lines[i].PointAtStart.Y,3), round(lines[i].PointAtStart.Z,3)))
-        endNode = ptCoords.index((round(lines[i].PointAtEnd.X,3), round(lines[i].PointAtEnd.Y,3), round(lines[i].PointAtEnd.Z,3)))
-        G.add_edge(startNode, endNode)
+    M = nx.grid_2d_graph(x,y)
+    return M
 
-    return G
+def getNodes(G, layout = 0):
 
-def getNodes(Kite):
-
-    lay =  nx.kamada_kawai_layout(Kite)
+    if layout == 0 : lay =  nx.kamada_kawai_layout(G)
+    elif layout == 1 : lay =  nx.circular_layout(G)
+    elif layout == 2 : lay =  nx.shell_layout(G)
+    elif layout == 3 : lay =  nx.spiral_layout(G)
+    else: lay = nx.planar_layout(G)
 
     nodes = []
     for d in lay.values():
@@ -36,9 +22,14 @@ def getNodes(Kite):
 
     return nodes
 
-def getEdges(G):
 
-    lay =  nx.kamada_kawai_layout(G)
+def getEdges(G, layout = 0):
+
+    if layout == 0 : lay =  nx.kamada_kawai_layout(G)
+    elif layout == 1 : lay =  nx.circular_layout(G)
+    elif layout == 2 : lay =  nx.shell_layout(G)
+    elif layout == 3 : lay =  nx.spiral_layout(G)
+    else: lay = nx.planar_layout(G)
 
     edges = []
     for e in G.edges:
@@ -50,8 +41,8 @@ def getEdges(G):
     return edges
 
 
-"""
+
 G = createGridGraph(3,3)
-GW = addRandomWeigrhs(G)
+
 nodes = getNodes(G)
 edges = getEdges(G)
